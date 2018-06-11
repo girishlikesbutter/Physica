@@ -1,3 +1,32 @@
+def latex_float(f):
+    float_str = "{0:.2g}".format(f)
+    if "e" in float_str:
+        base, exponent = float_str.split("e")
+        return r"{0} \times 10^{{{1}}}".format(base, int(exponent))
+    else:
+        return float_str
+
+def humanize(item):
+    if type(item) == uncertainties.core.Variable:
+        string = "${} \\pm {}$".format(latex_float(item.n), latex_float(item.s))
+    elif type(item) in [int, float, np.float64]:
+        string = "{}".format(latex_float(item))
+        
+    return string
+
+def enter_mathmode(string):
+    if("\\" in string):
+        x = string.split(" ")
+        bits = []
+        for bit in x:
+            if "\\" in bit:
+                # This word contains LaTeX, so enter math mode.
+                bit = "${}$".format(bit)
+            bits.append(bit)
+        # Concatenate everything back together into one word
+        return " ".join(bits)
+    return string
+
 def FFT(yn, dt, npt, plotter=None, xlim=50):
     """Generates the fast fourier transform of a set of data.
     

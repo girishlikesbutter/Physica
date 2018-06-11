@@ -1,5 +1,13 @@
 from physica import dataset
 
-data = Dataset([ufloat(1, 0.5),2,3], [4,ufloat(5,3),6], xlabel="\\lambda [m per mile]", ylabel="\\Omega [ohms per steradian]")
+x = np.linspace(0, 50, 100)
+yhat = list(3*x**2)
+y = list(np.random.normal(3*x**2, 2))
+x = list(x)
 
-data.plot(fmt="r.")
+def fit(x,a,b,c):
+    return a*(x+b)**2+c
+
+data = Dataset(x, y)
+
+data.plot(expected=yhat, fitfunc=fit)
